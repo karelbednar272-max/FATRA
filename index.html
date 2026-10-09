@@ -152,6 +152,37 @@ footer{padding:36px 0 50px;border-top:1px solid var(--line);color:var(--muted);f
   </footer>
 </div>
 
+
+
+<div class="battle" id="battle" aria-hidden="true"><div class="fighter bullfighter">🐂</div><div class="fighter bearfighter">🐻</div><div class="impact"></div><div class="battle-text">BULLS × BEARS</div></div>
+<div class="modal-backdrop" id="orderModal" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="orderTitle">
+    <button class="close" id="closeOrder" type="button" aria-label="Close">×</button>
+    <h2 id="orderTitle">Complete your order</h2>
+    <div class="modal-sub">Secure order form — your details will be sent directly to the FAITRA order inbox.</div>
+    <div class="order-product"><div><strong id="orderProduct">FAITRA Trading Bottle</strong><span>Matte black · Trading candlestick artwork</span></div><strong id="orderPrice">$29</strong></div>
+    <form id="orderForm" action="https://formsubmit.co/karel8732@gmail.com" method="POST">
+      <input type="hidden" name="_subject" value="New FAITRA shop order">
+      <input type="hidden" name="_template" value="table">
+      <input type="hidden" name="_next" value="https://karelbednar272-max.github.io/faitra/?order=sent">
+      <input type="hidden" name="_captcha" value="true">
+      <input type="hidden" name="total" id="hiddenTotal" value="$29.00">
+      <input type="hidden" name="product" value="FAITRA Trading Bottle" id="hiddenProduct">
+      <div class="formgrid">
+        <div class="field"><label>Name</label><input required name="name" autocomplete="name"></div>
+        <div class="field"><label>Email</label><input required type="email" name="email" autocomplete="email"></div>
+        <div class="field"><label>Phone</label><input required type="tel" name="phone" autocomplete="tel"></div>
+        <div class="field"><label>Country</label><input required name="country" autocomplete="country-name"></div>
+        <div class="field full"><label>Shipping address</label><input required name="address" autocomplete="street-address"></div>
+        <div class="field"><label>Quantity</label><input id="qty" required type="number" name="quantity" min="1" value="1"></div>
+        <div class="field"><label>Note (optional)</label><input name="note"></div>
+      </div>
+      <div class="total"><span>Total</span><span id="total">$29.00</span></div>
+      <button class="submit" type="submit">SEND ORDER</button>
+    </form>
+  </div>
+</div>
+
 <script>
 /* ===== FAITRA SHOP SETTINGS ===== */
 var PRICE = "$29";
@@ -188,7 +219,9 @@ function openOrder(product,price){
 function updateTotal(){
   var q=Math.max(1,parseInt(qty.value||1,10));
   qty.value=q;
-  total.textContent="$"+(q*Number(qty.dataset.price||29)).toFixed(2);
+  var amount=(q*Number(qty.dataset.price||29)).toFixed(2);
+  total.textContent="$"+amount;
+  document.getElementById("hiddenTotal").value="$"+amount;
 }
 
 document.getElementById("buy").addEventListener("click",function(){openOrder(PRODUCT_NAME,29)});
@@ -198,40 +231,7 @@ document.getElementById("closeOrder").addEventListener("click",function(){modal.
 modal.addEventListener("click",function(e){if(e.target===modal)modal.classList.remove("show")});
 qty.addEventListener("input",updateTotal);
 
-document.getElementById("orderForm").addEventListener("submit",function(e){
-  e.preventDefault();
-  var data=new FormData(form);
-  var q=Number(data.get("quantity"));
-  var unit=Number(qty.dataset.price||29);
-  var subject="FAITRA order — "+data.get("name");
-  var body="FAITRA ORDER\\n\\nProduct: "+data.get("product")+"\\nQuantity: "+q+"\\nTotal: $"+(q*unit).toFixed(2)+"\\n\\nName: "+data.get("name")+"\\nEmail: "+data.get("email")+"\\nPhone: "+data.get("phone")+"\\nCountry: "+data.get("country")+"\\nAddress: "+data.get("address")+"\\nNote: "+(data.get("note")||"");
-  window.location.href="mailto:"+ORDER_EMAIL+"?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(body);
-});
+// The form submits directly to FormSubmit; the customer's mail app is not needed.
 </script>
-
-<div class="battle" id="battle" aria-hidden="true"><div class="fighter bullfighter">🐂</div><div class="fighter bearfighter">🐻</div><div class="impact"></div><div class="battle-text">BULLS × BEARS</div></div>
-<div class="modal-backdrop" id="orderModal" aria-hidden="true">
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="orderTitle">
-    <button class="close" id="closeOrder" type="button" aria-label="Close">×</button>
-    <h2 id="orderTitle">Complete your order</h2>
-    <div class="modal-sub">Your FAITRA order will be prepared in your email app and sent to FAITRA.</div>
-    <div class="order-product"><div><strong id="orderProduct">FAITRA Trading Bottle</strong><span>Matte black · Trading candlestick artwork</span></div><strong id="orderPrice">$29</strong></div>
-    <form id="orderForm">
-      <input type="hidden" name="product" value="FAITRA Trading Bottle" id="hiddenProduct">
-      <div class="formgrid">
-        <div class="field"><label>Name</label><input required name="name" autocomplete="name"></div>
-        <div class="field"><label>Email</label><input required type="email" name="email" autocomplete="email"></div>
-        <div class="field"><label>Phone</label><input required type="tel" name="phone" autocomplete="tel"></div>
-        <div class="field"><label>Country</label><input required name="country" autocomplete="country-name"></div>
-        <div class="field full"><label>Shipping address</label><input required name="address" autocomplete="street-address"></div>
-        <div class="field"><label>Quantity</label><input id="qty" required type="number" name="quantity" min="1" value="1"></div>
-        <div class="field"><label>Note (optional)</label><input name="note"></div>
-      </div>
-      <div class="total"><span>Total</span><span id="total">$29.00</span></div>
-      <button class="submit" type="submit">SEND ORDER</button>
-    </form>
-  </div>
-</div>
-
 </body>
 </html>
